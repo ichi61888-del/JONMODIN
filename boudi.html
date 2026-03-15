@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Happy Birthday Boudi</title>
+
+<style>
+
+body{
+margin:0;
+font-family:Arial;
+background:linear-gradient(135deg,#ff758c,#ff7eb3);
+text-align:center;
+color:white;
+overflow:hidden;
+}
+
+.container{
+padding:20px;
+}
+
+h1{
+font-size:3rem;
+margin-top:20px;
+}
+
+img{
+width:220px;
+border-radius:20px;
+margin-top:20px;
+box-shadow:0 10px 30px rgba(0,0,0,0.4);
+}
+
+#message{
+font-size:1.2rem;
+max-width:400px;
+margin:auto;
+margin-top:20px;
+}
+
+button{
+margin-top:25px;
+padding:12px 30px;
+border:none;
+border-radius:30px;
+background:white;
+color:#ff4d6d;
+font-size:1rem;
+cursor:pointer;
+}
+
+canvas{
+position:fixed;
+top:0;
+left:0;
+pointer-events:none;
+}
+
+.heart{
+position:fixed;
+font-size:20px;
+animation:float 6s linear infinite;
+}
+
+@keyframes float{
+
+0%{transform:translateY(100vh);opacity:1;}
+100%{transform:translateY(-10vh);opacity:0;}
+
+}
+
+@media(max-width:600px){
+
+h1{font-size:2rem;}
+
+img{width:170px;}
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<canvas id="confetti"></canvas>
+
+<div class="container">
+
+<h1>🎉 Happy Birthday BOUDI 🎉</h1>
+
+<img src="boudi.jpg">
+
+<p id="message"></p>
+
+<button onclick="startParty()">Start Surprise 🎁</button>
+
+</div>
+
+<audio id="music">
+
+<source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3">
+
+</audio>
+
+<script>
+
+const text="Wishing you a very Happy Birthday Boudi! May your life be filled with happiness, love and success. You deserve all the smiles in the world 🎂💖";
+
+let i=0;
+
+function type(){
+
+if(i<text.length){
+
+document.getElementById("message").innerHTML+=text.charAt(i);
+
+i++;
+
+setTimeout(type,40);
+
+}
+
+}
+
+/* Confetti */
+
+const canvas=document.getElementById("confetti");
+
+const ctx=canvas.getContext("2d");
+
+canvas.width=window.innerWidth;
+
+canvas.height=window.innerHeight;
+
+let pieces=[];
+
+function randomColor(){
+
+const colors=["#ff0a54","#ff477e","#ff85a1","#ffd166","#06d6a0","#118ab2"];
+
+return colors[Math.floor(Math.random()*colors.length)];
+
+}
+
+function createConfetti(){
+
+for(let i=0;i<200;i++){
+
+pieces.push({
+
+x:Math.random()*canvas.width,
+
+y:Math.random()*canvas.height-canvas.height,
+
+size:Math.random()*8+2,
+
+speed:Math.random()*3+2,
+
+color:randomColor()
+
+});
+
+}
+
+}
+
+function draw(){
+
+ctx.clearRect(0,0,canvas.width,canvas.height);
+
+pieces.forEach(p=>{
+
+ctx.fillStyle=p.color;
+
+ctx.fillRect(p.x,p.y,p.size,p.size);
+
+p.y+=p.speed;
+
+if(p.y>canvas.height){
+
+p.y=-10;
+
+p.x=Math.random()*canvas.width;
+
+}
+
+});
+
+}
+
+/* Hearts */
+
+function hearts(){
+
+for(let i=0;i<15;i++){
+
+let heart=document.createElement("div");
+
+heart.innerHTML="💖";
+
+heart.className="heart";
+
+heart.style.left=Math.random()*100+"vw";
+
+heart.style.fontSize=(Math.random()*20+20)+"px";
+
+document.body.appendChild(heart);
+
+setTimeout(()=>{heart.remove()},6000);
+
+}
+
+}
+
+/* Fireworks */
+
+function fireworks(){
+
+for(let i=0;i<80;i++){
+
+pieces.push({
+
+x:canvas.width/2,
+
+y:canvas.height/2,
+
+size:Math.random()*10+4,
+
+speed:Math.random()*6+2,
+
+color:randomColor()
+
+});
+
+}
+
+}
+
+function startParty(){
+
+document.getElementById("music").play();
+
+createConfetti();
+
+setInterval(draw,20);
+
+type();
+
+hearts();
+
+fireworks();
+
+}
+
+document.body.addEventListener("click",createConfetti);
+
+</script>
+
+</body>
+
+</html>
